@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Ingredient {
 
-    private  String id;
-    private  String name;
-    private  String type;
+    private final String id;
+    private final String name;
+    private final String type;
 
     public static enum Type {
-        WARP, PROTEIN, VEGGIES, CHEESE, SAUSE
+        WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE
     }
 
 }

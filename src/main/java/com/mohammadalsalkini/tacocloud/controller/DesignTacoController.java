@@ -24,6 +24,8 @@ public class DesignTacoController {
 
     @GetMapping
     public String showDesignForm(Model model) {
+
+        log.info("Start showDesignForm method ...");
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
                 new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
@@ -43,21 +45,25 @@ public class DesignTacoController {
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
         }
         model.addAttribute("design", new Taco());
+        log.info("End showDesignForm method.");
         return "design";
     }
 
     @PostMapping
     public String processingDesign(@Valid @ModelAttribute("design") Taco design, Errors errors, Model model) {
-
+        log.info("Start processingDesign method ...");
         if (errors.hasErrors()) {
             return "design";
         }
 
+        log.info("Processing design: " + design);
+        log.info("End processingDesign method.");
         return "redirect:/orders/current";
 
     }
 
     private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
+        log.info("inside filterByType method ...");
         return ingredients
                 .stream()
                 .filter(x -> x.getType().equals(type))

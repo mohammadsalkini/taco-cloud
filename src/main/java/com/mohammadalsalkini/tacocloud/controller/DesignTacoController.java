@@ -6,15 +6,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
+import com.mohammadalsalkini.tacocloud.model.Order;
 import com.mohammadalsalkini.tacocloud.repository.IngredientRepository;
+import com.mohammadalsalkini.tacocloud.repository.TacoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import com.mohammadalsalkini.tacocloud.model.Taco;
 import com.mohammadalsalkini.tacocloud.model.Ingredient;
@@ -23,13 +22,27 @@ import com.mohammadalsalkini.tacocloud.model.Ingredient.Type;
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes("order")
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepository;
 
+    private TacoRepository designRepository;
+
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository) {
+    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository designRepository) {
         this.ingredientRepository = ingredientRepository;
+        this.designRepository = designRepository;
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco () {
+        return new Taco();
+    }
+
+    @ModelAttribute(name = "order")
+    public Order order () {
+        return new Order();
     }
 
     @GetMapping
@@ -49,13 +62,14 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processingDesign(@Valid @ModelAttribute("design") Taco design, Errors errors, Model model) {
+    public String processingDesign(@Valid Taco design, Errors errors, @ModelAttribute Order order) {
         log.info("Start processingDesign method ...");
         if (errors.hasErrors()) {
             return "design";
         }
 
-        log.info("Processing design: " + design);
+       Taco saved = designRepository.save(design);
+        order.addDesign(saved);
         log.info("End processingDesign method.");
         return "redirect:/orders/current";
 

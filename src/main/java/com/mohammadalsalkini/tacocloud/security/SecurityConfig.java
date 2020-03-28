@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -22,22 +23,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/design", "/orders")
+                .access("hasRole('ROLE_USER')")
+                .antMatchers("/", "/**").access("permitAll")
 
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(encoder());
 
-//        //configureAuthentication_inMemory
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("mohammad")
-//                .password("{noop}password")
-//                .authorities("ROLE_USER")
-//                .and()
-//                .withUser("omran")
-//                .password("{noop}password")
-//                .authorities("ROLE_USER");
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/h2-console/**")
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+        ;
     }
 
     @Bean
@@ -45,18 +52,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new StandardPasswordEncoder("53cr3t");
     }
 
+
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/design", "/orders")
-                .hasRole("ROLE_USER")
-                .antMatchers("/", "/**").permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-        ;
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(encoder());
+
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.mohammadalsalkini.tacocloud.repository;
+package com.mohammadalsalkini.tacocloud.data;
 
 import com.mohammadalsalkini.tacocloud.model.Ingredient;
 import org.springframework.data.repository.CrudRepository;

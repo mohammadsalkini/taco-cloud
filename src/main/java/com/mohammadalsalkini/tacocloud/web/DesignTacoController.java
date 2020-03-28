@@ -1,14 +1,13 @@
-package com.mohammadalsalkini.tacocloud.controller;
+package com.mohammadalsalkini.tacocloud.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.mohammadalsalkini.tacocloud.model.Order;
-import com.mohammadalsalkini.tacocloud.repository.IngredientRepository;
-import com.mohammadalsalkini.tacocloud.repository.TacoRepository;
+import com.mohammadalsalkini.tacocloud.data.IngredientRepository;
+import com.mohammadalsalkini.tacocloud.data.TacoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

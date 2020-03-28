@@ -1,4 +1,4 @@
-package com.mohammadalsalkini.tacocloud.Configuration;
+package com.mohammadalsalkini.tacocloud.web;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
